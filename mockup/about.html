@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>소개 - 연영회</title>
+  <link rel="stylesheet" href="css/globals.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/about.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navigation" id="navigation">
+    <div class="nav-container">
+      <div class="nav-left">
+        <button class="admin-toggle-btn" id="adminToggle" title="관리자 모드 토글">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+        </button>
+        <a href="index.html" class="logo">
+          <div class="logo-image">
+            <img src="../public/images/연영회 방패로고_검정.jpg" alt="연영회 로고">
+          </div>
+          <div class="logo-text">
+            <span>연세대학교 중앙사진동아리</span>
+            연영회
+          </div>
+        </a>
+      </div>
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="메뉴 토글">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li class="has-dropdown">
+          <a href="index.html" class="active">ABOUT</a>
+          <ul class="dropdown">
+            <li><a href="index.html">연영회 소개</a></li>
+            <li><a href="about.html" class="active">연혁</a></li>
+            <li><a href="photographers.html">PHOTOGRAPHERS</a></li>
+            <li><a href="recruiting.html">RECRUITING</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="records.html">ARCHIVE</a>
+          <ul class="dropdown">
+            <li><a href="records.html">활동 기록</a></li>
+            <li><a href="exhibitions.html">전시회</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="linktree.html">FOR MEMBERS</a>
+          <ul class="dropdown">
+            <li><a href="market.html">연영장터</a></li>
+            <li><a href="linktree.html">LINKTREE</a></li>
+          </ul>
+        </li>
+        <li><a href="donate.html">DONATE US</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="about-page">
+    <div class="container">
+      <section class="about-hero"></section>
+
+      <section class="about-content">
+        <div class="about-section">
+          <h2>연영회 소개</h2>
+          <p>
+            연영회는 사진을 통해 세상을 기록하고 표현하는 동아리입니다.
+            우리는 다양한 주제와 스타일로 사진을 찍으며, 서로의 작품을 공유하고
+            함께 성장해 나갑니다.
+          </p>
+        </div>
+
+        <div class="about-section activity-section">
+          <h2>연간 활동</h2>
+          <div class="activity-columns" id="activityColumns">
+            <!-- 활동 타임라인이 동적으로 추가됩니다 -->
+          </div>
+        </div>
+
+        <div class="about-section activity-section">
+          <h2>연혁</h2>
+          <div class="activity-columns single-column" id="historyColumns">
+            <!-- 연혁 타임라인이 동적으로 추가됩니다 -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="logo-text">연세대학교 중앙사진동아리 연영회</div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="footer-info-grid">
+          <div class="footer-info-item">
+            <span class="info-label">오픈 카톡방</span>
+            <a href="https://open.kakao.com/o/snVWZ4th" target="_blank" class="info-content link-shortcut">링크 바로가기</a>
+          </div>
+          
+          <div class="footer-info-item">
+            <span class="info-label">INSTAGRAM</span>
+            <span class="info-content">@yonyongpage</span>
+          </div>
+
+          <div class="footer-info-item">
+            <span class="info-label">E-mail</span>
+            <a href="mailto:kimse0604@naver.com" class="info-content">kimse0604@naver.com</a>
+          </div>
+          
+          <div class="footer-info-item">
+            <span class="info-label">HP</span>
+            <span class="info-content">010-6814-1800</span>
+          </div>
+          
+          <div class="footer-info-item">
+            <span class="info-label">주소</span>
+            <span class="info-content">서울특별시 서대문구 연희로 50 연세대학교 대강당 nn호</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    // Navigation scroll effect
+    const navigation = document.getElementById('navigation');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navigation.classList.add('scrolled');
+      } else {
+        navigation.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
+    mobileMenuToggle?.addEventListener('click', () => {
+      navMenu.classList.toggle('open');
+    });
+
+    // Admin mode
+    const adminToggle = document.getElementById('adminToggle');
+    function updateAdminUI(isAdmin) {
+      if (isAdmin) {
+        document.body.classList.add('admin-mode');
+        adminToggle?.classList.add('active');
+      } else {
+        document.body.classList.remove('admin-mode');
+        adminToggle?.classList.remove('active');
+      }
+    }
+    updateAdminUI(getAdminMode());
+    adminToggle?.addEventListener('click', () => {
+      const newMode = !getAdminMode();
+      setAdminMode(newMode);
+      updateAdminUI(newMode);
+    });
+
+    // Render activities timeline
+    const activityColumns = document.getElementById('activityColumns');
+    const activities = aboutData.activities;
+    const firstHalf = activities.slice(0, 3);
+    const secondHalf = activities.slice(3);
+
+    function renderTimelineColumn(items) {
+      return items.map(item => `
+        <div class="activity-timeline-item">
+          <div class="dot"></div>
+          <div class="content">
+            <span class="month">${item.month}</span>
+            <span class="title">${item.title}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    activityColumns.innerHTML = `
+      <div class="activity-column">${renderTimelineColumn(firstHalf)}</div>
+      <div class="activity-column">${renderTimelineColumn(secondHalf)}</div>
+    `;
+
+    // Render history timeline
+    const historyColumns = document.getElementById('historyColumns');
+    historyColumns.innerHTML = `
+      <div class="activity-column">
+        ${aboutData.history.map(item => `
+          <div class="activity-timeline-item">
+            <div class="dot"></div>
+            <div class="content">
+              <span class="month">${item.year}</span>
+              <span class="title">${item.title}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  </script>
+</body>
+</html>

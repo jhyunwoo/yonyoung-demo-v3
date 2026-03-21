@@ -1,0 +1,151 @@
+.donate-page {
+  padding-top: 80px;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.donate-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.donate-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.donate-header h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.donate-subtitle {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.donate-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.donate-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.donate-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.account-info {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.bank-name {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 0.5rem;
+}
+
+.account-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.account-holder {
+  font-size: 1rem;
+  color: var(--text-light);
+}
+
+.copy-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  background-color: #1a1f3d;
+}
+
+.copy-btn.copied {
+  background-color: #28a745;
+}
+
+.usage-list {
+  list-style: none;
+  padding: 0;
+}
+
+.usage-list li {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.usage-list li:last-child {
+  border-bottom: none;
+}
+
+.usage-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.usage-list span:not(.usage-icon) {
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.donate-message {
+  text-align: center;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.donate-message p {
+  color: var(--text-light);
+  line-height: 1.8;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .donate-content {
+    padding: 2rem 1rem;
+  }
+
+  .donate-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .donate-info {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .donate-card {
+    padding: 1.5rem;
+  }
+}

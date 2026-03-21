@@ -1,0 +1,166 @@
+.preview-section {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.preview-section h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.preview-item {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  transition: transform 0.3s ease;
+  text-decoration: none;
+  display: block;
+}
+
+.preview-item:hover {
+  transform: scale(1.05);
+}
+
+.preview-image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  padding: 1.5rem;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preview-item:hover .preview-overlay {
+  opacity: 1;
+}
+
+.preview-overlay h3 {
+  color: white;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.preview-date {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+  color: white;
+}
+
+.view-all-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.view-all-link {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  border: 1px solid #333;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+}
+
+.view-all-link:hover {
+  background-color: #333;
+  color: white;
+}
+
+/* 추가/편집 버튼 */
+.add-activity-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(44, 51, 87, 0.3);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.add-activity-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(44, 51, 87, 0.4);
+}
+
+.preview-item .edit-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.preview-item .edit-btn:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+@media (max-width: 1024px) {
+  .preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .preview-section {
+    padding: 2rem 0;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .preview-overlay {
+    opacity: 1;
+    padding: 1rem;
+  }
+
+  .preview-overlay h3 {
+    font-size: 0.9rem;
+  }
+}

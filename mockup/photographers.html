@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHOTOGRAPHERS - 연영회</title>
+  <link rel="stylesheet" href="css/globals.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/photographers.css">
+  <style>
+    /* Member Detail Modal - 1:1 정사각형 */
+    .member-modal-content {
+      display: flex;
+      flex-direction: column;
+      background: white;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      overflow: hidden;
+    }
+    .modal-photo-section {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #f5f5f5;
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-photo-section img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .modal-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .modal-photo-placeholder svg {
+      width: 80px;
+      height: 80px;
+      stroke: white;
+      opacity: 0.5;
+    }
+    .modal-info-section {
+      padding: 1.5rem;
+    }
+    .modal-member-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      color: #333;
+    }
+    .modal-member-gen {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .modal-info-row {
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    .modal-info-row:last-child {
+      border-bottom: none;
+    }
+    .modal-info-label {
+      width: 100px;
+      font-size: 0.85rem;
+      color: #888;
+    }
+    .modal-info-value {
+      flex: 1;
+      font-size: 0.95rem;
+      color: #333;
+    }
+    .modal-info-value a {
+      color: #3498db;
+      text-decoration: none;
+    }
+    .modal-info-value a:hover {
+      text-decoration: underline;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .status-badge.available {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    .status-badge.unavailable {
+      background: #ffebee;
+      color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navigation" id="navigation">
+    <div class="nav-container">
+      <div class="nav-left">
+        <button class="admin-toggle-btn" id="adminToggle" title="관리자 모드 토글">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+        </button>
+        <a href="index.html" class="logo">
+          <div class="logo-image">
+            <img src="../public/images/연영회 방패로고_검정.jpg" alt="연영회 로고">
+          </div>
+          <div class="logo-text">
+            <span>연세대학교 중앙사진동아리</span>
+            연영회
+          </div>
+        </a>
+      </div>
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="메뉴 토글">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li class="has-dropdown">
+          <a href="index.html" class="active">ABOUT</a>
+          <ul class="dropdown">
+            <li><a href="index.html">연영회 소개</a></li>
+            <li><a href="about.html">연혁</a></li>
+            <li><a href="photographers.html" class="active">PHOTOGRAPHERS</a></li>
+            <li><a href="recruiting.html">RECRUITING</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="records.html">ARCHIVE</a>
+          <ul class="dropdown">
+            <li><a href="records.html">활동 기록</a></li>
+            <li><a href="exhibitions.html">전시회</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="linktree.html">FOR MEMBERS</a>
+          <ul class="dropdown">
+            <li><a href="market.html">연영장터</a></li>
+            <li><a href="linktree.html">LINKTREE</a></li>
+          </ul>
+        </li>
+        <li><a href="donate.html">DONATE US</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="photographers-page">
+    <div class="container">
+      <section class="photographers-hero">
+        <h1>PHOTOGRAPHERS</h1>
+        <p class="subtitle">연영회 사진가 목록</p>
+        <button class="add-gen-btn admin-only" id="addPhotographerBtn">+ 새 사진가 추가</button>
+      </section>
+
+      <header class="photographers-header">
+        <div class="filter-nav" id="filterNav">
+          <!-- 기수 필터가 동적으로 추가됩니다 -->
+        </div>
+      </header>
+
+      <div class="photographers-content" id="photographersContent">
+        <!-- 사진가 목록이 동적으로 추가됩니다 -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Member Detail Modal (1:1 정사각형) -->
+  <div class="member-modal-overlay" id="memberModal">
+    <div class="member-modal-content">
+      <div class="modal-photo-section">
+        <img src="" alt="" id="modalMainPhoto" style="display: none;">
+        <div class="modal-photo-placeholder" id="modalPhotoPlaceholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+      </div>
+      <div class="modal-info-section">
+        <h2 class="modal-member-name" id="modalMemberName"></h2>
+        <p class="modal-member-gen" id="modalMemberGen"></p>
+        <div class="modal-info-row">
+          <span class="modal-info-label">회원 구분</span>
+          <span class="modal-info-value" id="modalMemberType"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="modal-info-label">협업 가능 여부</span>
+          <span class="modal-info-value" id="modalCollaboration"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="modal-info-label">이메일</span>
+          <span class="modal-info-value" id="modalEmail"></span>
+        </div>
+        <div class="modal-info-row">
+          <span class="modal-info-label">개인 링크</span>
+          <span class="modal-info-value" id="modalPersonalLink"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="member-modal-overlay" id="formModal">
+    <div class="member-form-modal">
+      <h2 id="formModalTitle">새 사진가 추가</h2>
+      <form id="photographerForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>기수 (예: 60)</label>
+            <input type="text" id="formGeneration" required>
+          </div>
+          <div class="form-group">
+            <label>이름</label>
+            <input type="text" id="formName" required>
+          </div>
+          <div class="form-group">
+            <label>회원 구분</label>
+            <select id="formType">
+              <option value="정회원">정회원</option>
+              <option value="준회원">준회원</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>협업 가능 여부</label>
+            <select id="formCollaboration">
+              <option value="가능">가능</option>
+              <option value="불가능">불가능</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>이메일 주소</label>
+            <input type="email" id="formEmail">
+          </div>
+          <div class="form-group">
+            <label>개인 링크</label>
+            <input type="text" id="formPersonalLink" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label>대표 사진</label>
+          <div class="image-inputs">
+            <div class="upload-field">
+              <input type="file" id="formMainPhotoFile" accept="image/*">
+              <input type="hidden" id="formMainPhoto">
+              <div class="upload-preview-container" id="mainPhotoPreview"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-danger admin-only" id="deletePhotographerBtn" style="margin-right: auto; display: none;">삭제</button>
+          <button type="button" id="formCancel">취소</button>
+          <button type="submit" class="submit-btn">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="logo-text">연세대학교 중앙사진동아리 연영회</div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="footer-info-grid">
+          <div class="footer-info-item">
+            <span class="info-label">오픈 카톡방</span>
+            <a href="https://open.kakao.com/o/snVWZ4th" target="_blank" class="info-content link-shortcut">링크 바로가기</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">INSTAGRAM</span>
+            <span class="info-content">@yonyongpage</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">E-mail</span>
+            <a href="mailto:kimse0604@naver.com" class="info-content">kimse0604@naver.com</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">HP</span>
+            <span class="info-content">010-6814-1800</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">주소</span>
+            <span class="info-content">서울특별시 서대문구 연희로 50 연세대학교 대강당 nn호</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    // Photographers 데이터 (새 구조)
+    const photographersData = [
+      {
+        generation: "60기",
+        members: [
+          { name: "김고운", type: "준회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "윤새연", type: "준회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "강지인", type: "준회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "박서연", type: "준회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "이민지", type: "준회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "김민재", type: "준회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "../public/images/photographers/1768718789204_KakaoTalk_20260118_031201964_08.jpg" },
+          { name: "김세헌", type: "준회원", collaboration: "가능", email: "kimse0604@naver.com", personalLink: "", mainPhoto: "../public/images/photographers/1768718828473_KakaoTalk_20260118_031201964_07.jpg" }
+        ]
+      },
+      {
+        generation: "59기",
+        members: [
+          { name: "김현식", type: "정회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "../public/images/photographers/1768718475043_KakaoTalk_20260112_143118801.jpg" },
+          { name: "정종윤", type: "정회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "김채연", type: "준회원", collaboration: "불가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "박미래", type: "정회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "박민규", type: "정회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "조성민", type: "정회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" },
+          { name: "오유진", type: "정회원", collaboration: "가능", email: "", personalLink: "", mainPhoto: "" }
+        ]
+      },
+      {
+        generation: "58기",
+        members: [
+          { name: "심정섭", type: "정회원", collaboration: "불가능", email: "", personalLink: "", mainPhoto: "" }
+        ]
+      }
+    ];
+
+    // LocalStorage 키
+    const PHOTOGRAPHERS_KEY = 'mockup_photographers_v2';
+
+    // 데이터 관리
+    function getPhotographers() {
+      const stored = localStorage.getItem(PHOTOGRAPHERS_KEY);
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      return photographersData;
+    }
+
+    function savePhotographers(data) {
+      localStorage.setItem(PHOTOGRAPHERS_KEY, JSON.stringify(data));
+    }
+
+    // State
+    let photographers = [];
+    let editingMember = null;
+
+    // DOM Elements
+    const navigation = document.getElementById('navigation');
+    const adminToggle = document.getElementById('adminToggle');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const filterNav = document.getElementById('filterNav');
+    const photographersContent = document.getElementById('photographersContent');
+    const memberModal = document.getElementById('memberModal');
+    const formModal = document.getElementById('formModal');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initNavigation();
+      initAdminMode();
+      loadPhotographers();
+      initModals();
+    });
+
+    function initNavigation() {
+      window.addEventListener('scroll', () => {
+        navigation.classList.toggle('scrolled', window.scrollY > 50);
+      });
+      mobileMenuToggle?.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+      });
+    }
+
+    function initAdminMode() {
+      updateAdminUI(getAdminMode());
+      adminToggle?.addEventListener('click', () => {
+        const newMode = !getAdminMode();
+        setAdminMode(newMode);
+        updateAdminUI(newMode);
+      });
+    }
+
+    function updateAdminUI(isAdmin) {
+      document.body.classList.toggle('admin-mode', isAdmin);
+      adminToggle?.classList.toggle('active', isAdmin);
+    }
+
+    function loadPhotographers() {
+      photographers = getPhotographers();
+      // 정렬: 정회원 먼저, 이름순
+      photographers.forEach(group => {
+        group.members.sort((a, b) => {
+          if (a.type !== b.type) return a.type === '정회원' ? -1 : 1;
+          return a.name.localeCompare(b.name, 'ko');
+        });
+      });
+      renderFilterNav();
+      renderPhotographers();
+    }
+
+    function renderFilterNav() {
+      filterNav.innerHTML = photographers.map(group => 
+        `<a href="#gen-${group.generation.replace('기', '')}">${group.generation}</a>`
+      ).join('');
+    }
+
+    function renderPhotographers() {
+      photographersContent.innerHTML = photographers.map(group => `
+        <section id="gen-${group.generation.replace('기', '')}" class="gen-section">
+          <h2 class="gen-title">${group.generation}</h2>
+          <div class="members-grid">
+            ${group.members.map(member => `
+              <div class="member-item" data-name="${member.name}" data-gen="${group.generation}">
+                <div class="member-photo-wrapper">
+                  <div class="member-photo ${member.type === '정회원' ? 'full-member' : 'associate-member'}">
+                    ${member.mainPhoto ? 
+                      `<img src="${member.mainPhoto}" alt="${member.name}" class="profile-img">` : 
+                      '<div class="photo-placeholder"></div>'
+                    }
+                  </div>
+                  <div class="admin-actions admin-only">
+                    <button class="edit-btn" title="수정">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4L18.5 2.5z"></path></svg>
+                    </button>
+                    <button class="delete-btn" title="삭제">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </div>
+                <span class="member-name">${member.name}</span>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+      `).join('');
+
+      // Event listeners
+      document.querySelectorAll('.member-item').forEach(item => {
+        const memberPhoto = item.querySelector('.member-photo');
+        memberPhoto?.addEventListener('click', (e) => {
+          if (!getAdminMode()) {
+            const name = item.dataset.name;
+            const gen = item.dataset.gen;
+            showMemberDetail(name, gen);
+          }
+        });
+
+        const editBtn = item.querySelector('.edit-btn');
+        editBtn?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const name = item.dataset.name;
+          const gen = item.dataset.gen;
+          openEditModal(name, gen);
+        });
+
+        const deleteBtn = item.querySelector('.delete-btn');
+        deleteBtn?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const name = item.dataset.name;
+          const gen = item.dataset.gen;
+          deleteMember(name, gen);
+        });
+      });
+    }
+
+    function showMemberDetail(name, generation) {
+      const group = photographers.find(g => g.generation === generation);
+      const member = group?.members.find(m => m.name === name);
+      if (!member) return;
+
+      const modalMainPhoto = document.getElementById('modalMainPhoto');
+      const modalPhotoPlaceholder = document.getElementById('modalPhotoPlaceholder');
+      
+      if (member.mainPhoto) {
+        modalMainPhoto.src = member.mainPhoto;
+        modalMainPhoto.style.display = 'block';
+        modalPhotoPlaceholder.style.display = 'none';
+      } else {
+        modalMainPhoto.style.display = 'none';
+        modalPhotoPlaceholder.style.display = 'flex';
+      }
+
+      document.getElementById('modalMemberName').textContent = member.name;
+      document.getElementById('modalMemberGen').textContent = generation + ' · ' + member.type;
+      document.getElementById('modalMemberType').textContent = member.type;
+      
+      const collabEl = document.getElementById('modalCollaboration');
+      collabEl.innerHTML = member.collaboration === '가능' 
+        ? '<span class="status-badge available">가능</span>'
+        : '<span class="status-badge unavailable">불가능</span>';
+      
+      const emailEl = document.getElementById('modalEmail');
+      emailEl.innerHTML = member.email 
+        ? `<a href="mailto:${member.email}">${member.email}</a>`
+        : '-';
+      
+      const linkEl = document.getElementById('modalPersonalLink');
+      linkEl.innerHTML = member.personalLink 
+        ? `<a href="${member.personalLink}" target="_blank">바로가기</a>`
+        : '-';
+
+      memberModal.classList.add('active');
+    }
+
+    function initModals() {
+      // Member detail modal
+      memberModal.addEventListener('click', (e) => {
+        if (e.target === memberModal) {
+          memberModal.classList.remove('active');
+        }
+      });
+
+      // Form modal
+      formModal.addEventListener('click', (e) => {
+        if (e.target === formModal) {
+          formModal.classList.remove('active');
+        }
+      });
+
+      document.getElementById('formCancel').addEventListener('click', () => {
+        formModal.classList.remove('active');
+      });
+
+      document.getElementById('addPhotographerBtn')?.addEventListener('click', () => {
+        openAddModal();
+      });
+
+      document.getElementById('photographerForm').addEventListener('submit', handleFormSubmit);
+
+      document.getElementById('deletePhotographerBtn').addEventListener('click', () => {
+        if (editingMember && confirm('정말 삭제하시겠습니까?')) {
+          deleteMember(editingMember.name, editingMember.generation);
+          formModal.classList.remove('active');
+        }
+      });
+
+      // Image upload handler
+      setupImageUpload('formMainPhotoFile', 'formMainPhoto', 'mainPhotoPreview');
+    }
+
+    function setupImageUpload(fileInputId, hiddenInputId, previewId) {
+      const fileInput = document.getElementById(fileInputId);
+      const hiddenInput = document.getElementById(hiddenInputId);
+      const previewContainer = document.getElementById(previewId);
+
+      fileInput?.addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            hiddenInput.value = ev.target.result;
+            previewContainer.innerHTML = `<img src="${ev.target.result}" alt="미리보기">`;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    function openAddModal() {
+      editingMember = null;
+      document.getElementById('formModalTitle').textContent = '새 사진가 추가';
+      document.getElementById('formGeneration').value = '';
+      document.getElementById('formName').value = '';
+      document.getElementById('formType').value = '정회원';
+      document.getElementById('formCollaboration').value = '가능';
+      document.getElementById('formEmail').value = '';
+      document.getElementById('formPersonalLink').value = '';
+      document.getElementById('formMainPhoto').value = '';
+      document.getElementById('mainPhotoPreview').innerHTML = '';
+      document.getElementById('deletePhotographerBtn').style.display = 'none';
+      formModal.classList.add('active');
+    }
+
+    function openEditModal(name, generation) {
+      const group = photographers.find(g => g.generation === generation);
+      const member = group?.members.find(m => m.name === name);
+      if (!member) return;
+
+      editingMember = { ...member, generation };
+      document.getElementById('formModalTitle').textContent = '사진가 정보 수정';
+      document.getElementById('formGeneration').value = generation.replace('기', '');
+      document.getElementById('formName').value = member.name;
+      document.getElementById('formType').value = member.type;
+      document.getElementById('formCollaboration').value = member.collaboration || '가능';
+      document.getElementById('formEmail').value = member.email || '';
+      document.getElementById('formPersonalLink').value = member.personalLink || '';
+      document.getElementById('formMainPhoto').value = member.mainPhoto || '';
+      
+      const previewContainer = document.getElementById('mainPhotoPreview');
+      previewContainer.innerHTML = member.mainPhoto 
+        ? `<img src="${member.mainPhoto}" alt="미리보기">`
+        : '';
+      
+      document.getElementById('deletePhotographerBtn').style.display = 'block';
+      formModal.classList.add('active');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const generation = document.getElementById('formGeneration').value.includes('기') 
+        ? document.getElementById('formGeneration').value 
+        : `${document.getElementById('formGeneration').value}기`;
+      
+      const newMember = {
+        name: document.getElementById('formName').value,
+        type: document.getElementById('formType').value,
+        collaboration: document.getElementById('formCollaboration').value,
+        email: document.getElementById('formEmail').value,
+        personalLink: document.getElementById('formPersonalLink').value,
+        mainPhoto: document.getElementById('formMainPhoto').value
+      };
+
+      if (editingMember) {
+        // Update existing
+        const groupIdx = photographers.findIndex(g => g.generation === editingMember.generation);
+        if (groupIdx !== -1) {
+          const memberIdx = photographers[groupIdx].members.findIndex(m => m.name === editingMember.name);
+          if (memberIdx !== -1) {
+            // If generation changed, move to new group
+            if (editingMember.generation !== generation) {
+              photographers[groupIdx].members.splice(memberIdx, 1);
+              let newGroupIdx = photographers.findIndex(g => g.generation === generation);
+              if (newGroupIdx === -1) {
+                photographers.push({ generation, members: [] });
+                newGroupIdx = photographers.length - 1;
+              }
+              photographers[newGroupIdx].members.push(newMember);
+            } else {
+              photographers[groupIdx].members[memberIdx] = newMember;
+            }
+          }
+        }
+      } else {
+        // Add new
+        let groupIdx = photographers.findIndex(g => g.generation === generation);
+        if (groupIdx === -1) {
+          photographers.push({ generation, members: [] });
+          groupIdx = photographers.length - 1;
+        }
+        photographers[groupIdx].members.push(newMember);
+      }
+
+      savePhotographers(photographers);
+      loadPhotographers();
+      formModal.classList.remove('active');
+      alert(editingMember ? '정보가 수정되었습니다.' : '사진가가 추가되었습니다.');
+    }
+
+    function deleteMember(name, generation) {
+      if (!confirm(`${name} 사진가를 삭제하시겠습니까?`)) return;
+      
+      const groupIdx = photographers.findIndex(g => g.generation === generation);
+      if (groupIdx !== -1) {
+        photographers[groupIdx].members = photographers[groupIdx].members.filter(m => m.name !== name);
+        // Remove empty groups
+        if (photographers[groupIdx].members.length === 0) {
+          photographers.splice(groupIdx, 1);
+        }
+        savePhotographers(photographers);
+        loadPhotographers();
+        alert('삭제되었습니다.');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연영장터 - 연영회</title>
+  <link rel="stylesheet" href="css/globals.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/records.css">
+  <style>
+    .market-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+      .market-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .market-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 480px) {
+      .market-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .market-card {
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      border: 1px solid #e0e0e0;
+    }
+    .market-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .market-card.sold {
+      opacity: 0.7;
+    }
+    .market-card.sold::after {
+      content: '판매완료';
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #e74c3c;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .market-card-info {
+      padding: 1.5rem;
+      background: #ffffff;
+      color: #333;
+    }
+    .market-card-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 0.8rem 0;
+      line-height: 1.3;
+      color: #333;
+    }
+    .market-card-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .market-card-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: #666;
+    }
+    .market-card-detail .label {
+      color: #999;
+      min-width: 40px;
+    }
+    .market-card-price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-top: 0.5rem;
+    }
+
+    .market-card .edit-btn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .admin-mode .market-card .edit-btn {
+      display: flex;
+    }
+    .market-card .edit-btn:hover {
+      background: white;
+    }
+
+    /* Lightbox for images */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 2rem;
+    }
+    .lightbox-content {
+      background: white;
+      border-radius: 12px;
+      max-width: 800px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    .lightbox-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    .lightbox-header h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.3rem;
+    }
+    .lightbox-header .details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .lightbox-header .price {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-top: 0.5rem;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #999;
+      line-height: 1;
+    }
+    .lightbox-close:hover {
+      color: #333;
+    }
+    .lightbox-images {
+      padding: 1.5rem;
+    }
+    .lightbox-images img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .lightbox-images img:last-child {
+      margin-bottom: 0;
+    }
+    .lightbox-no-image {
+      padding: 3rem;
+      text-align: center;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navigation" id="navigation">
+    <div class="nav-container">
+      <div class="nav-left">
+        <button class="admin-toggle-btn" id="adminToggle" title="관리자 모드 토글">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+        </button>
+        <a href="index.html" class="logo">
+          <div class="logo-image">
+            <img src="../public/images/연영회 방패로고_검정.jpg" alt="연영회 로고">
+          </div>
+          <div class="logo-text">
+            <span>연세대학교 중앙사진동아리</span>
+            연영회
+          </div>
+        </a>
+      </div>
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="메뉴 토글">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li class="has-dropdown">
+          <a href="index.html">ABOUT</a>
+          <ul class="dropdown">
+            <li><a href="index.html">연영회 소개</a></li>
+            <li><a href="about.html">연혁</a></li>
+            <li><a href="photographers.html">PHOTOGRAPHERS</a></li>
+            <li><a href="recruiting.html">RECRUITING</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="records.html">ARCHIVE</a>
+          <ul class="dropdown">
+            <li><a href="records.html">활동 기록</a></li>
+            <li><a href="exhibitions.html">전시회</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="linktree.html" class="active">FOR MEMBERS</a>
+          <ul class="dropdown">
+            <li><a href="market.html" class="active">연영장터</a></li>
+            <li><a href="linktree.html">LINKTREE</a></li>
+          </ul>
+        </li>
+        <li><a href="donate.html">DONATE US</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="records-page">
+    <div class="container">
+      <section class="page-header">
+        <h1>연영장터</h1>
+        <p class="subtitle">연영회 부원을 위한 중고거래 장터입니다.<br>판매 및 구매 문의는 60기 학술부장 김세헌 (010-6814-1800) 으로 연락 바랍니다.</p>
+      </section>
+
+      <section class="market-grid" id="marketGrid">
+        <!-- 장터 카드가 동적으로 추가됩니다 -->
+      </section>
+
+      <!-- Add Market Item Button (Admin Only) -->
+      <button class="add-btn admin-only" id="addMarketBtn" title="새 물품 추가">+</button>
+    </div>
+  </main>
+
+  <!-- Add Market Modal -->
+  <div class="modal" id="marketModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">새 물품 추가</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="marketName">제품명</label>
+          <input type="text" id="marketName" placeholder="제품명을 입력하세요">
+        </div>
+        <div class="form-group">
+          <label for="marketCondition">상태</label>
+          <input type="text" id="marketCondition" placeholder="예: S급, A급, 사용감 있음">
+        </div>
+        <div class="form-group">
+          <label for="marketPrice">가격</label>
+          <input type="text" id="marketPrice" placeholder="예: 150,000원">
+        </div>
+        <div class="form-group">
+          <label for="marketSold">판매완료 여부</label>
+          <select id="marketSold">
+            <option value="false">판매중</option>
+            <option value="true">판매완료</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>이미지 (클릭 시 표시)</label>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="uploadInput" multiple accept="image/*">
+            <div class="upload-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17,8 12,3 7,8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <p>클릭하거나 이미지를 드래그하세요</p>
+            </div>
+          </div>
+          <div class="preview-images" id="previewImages"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger admin-only" id="deleteBtn" style="margin-right: auto;">삭제</button>
+        <button class="btn btn-secondary" id="modalCancel">취소</button>
+        <button class="btn btn-primary" id="modalConfirm">저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="logo-text">연세대학교 중앙사진동아리 연영회</div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="footer-info-grid">
+          <div class="footer-info-item">
+            <span class="info-label">오픈 카톡방</span>
+            <a href="https://open.kakao.com/o/snVWZ4th" target="_blank" class="info-content link-shortcut">링크 바로가기</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">INSTAGRAM</span>
+            <span class="info-content">@yonyongpage</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">E-mail</span>
+            <a href="mailto:kimse0604@naver.com" class="info-content">kimse0604@naver.com</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">HP</span>
+            <span class="info-content">010-6814-1800</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">주소</span>
+            <span class="info-content">서울특별시 서대문구 연희로 50 연세대학교 대강당 nn호</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    // Market 데이터 (새 구조)
+    const defaultMarketData = [
+      {
+        id: 1,
+        name: "캐논 EOS R5 바디",
+        condition: "S급",
+        price: "3,500,000원",
+        sold: false,
+        images: ["../public/images/banner/김세헌_0025.jpg"]
+      },
+      {
+        id: 2,
+        name: "시그마 35mm F1.4 Art",
+        condition: "A급 (사용감 약간)",
+        price: "650,000원",
+        sold: true,
+        images: []
+      }
+    ];
+
+    // LocalStorage 키
+    const MARKET_KEY = 'mockup_market_v2';
+
+    // 데이터 관리
+    function getMarket() {
+      const stored = localStorage.getItem(MARKET_KEY);
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      return defaultMarketData;
+    }
+
+    function saveMarket(data) {
+      localStorage.setItem(MARKET_KEY, JSON.stringify(data));
+    }
+
+    // State
+    let marketItems = [];
+    let uploadedImages = [];
+    let editingId = null;
+
+    // DOM Elements
+    const navigation = document.getElementById('navigation');
+    const adminToggle = document.getElementById('adminToggle');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const marketGrid = document.getElementById('marketGrid');
+    const addMarketBtn = document.getElementById('addMarketBtn');
+    const marketModal = document.getElementById('marketModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalClose = document.getElementById('modalClose');
+    const modalCancel = document.getElementById('modalCancel');
+    const modalConfirm = document.getElementById('modalConfirm');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const uploadInput = document.getElementById('uploadInput');
+    const previewImages = document.getElementById('previewImages');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initNavigation();
+      initAdminMode();
+      loadMarket();
+      initModal();
+    });
+
+    function initNavigation() {
+      window.addEventListener('scroll', () => {
+        navigation.classList.toggle('scrolled', window.scrollY > 50);
+      });
+      mobileMenuToggle?.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+      });
+    }
+
+    function initAdminMode() {
+      updateAdminUI(getAdminMode());
+      adminToggle?.addEventListener('click', () => {
+        const newMode = !getAdminMode();
+        setAdminMode(newMode);
+        updateAdminUI(newMode);
+      });
+    }
+
+    function updateAdminUI(isAdmin) {
+      if (isAdmin) {
+        document.body.classList.add('admin-mode');
+        adminToggle?.classList.add('active');
+      } else {
+        document.body.classList.remove('admin-mode');
+        adminToggle?.classList.remove('active');
+      }
+    }
+
+    function loadMarket() {
+      marketItems = getMarket();
+      renderMarket();
+    }
+
+    function renderMarket() {
+      marketGrid.innerHTML = marketItems.map(item => `
+        <div class="market-card ${item.sold ? 'sold' : ''}" data-id="${item.id}">
+          <div class="market-card-info">
+            <h3 class="market-card-name">${item.name}</h3>
+            <div class="market-card-details">
+              <div class="market-card-detail">
+                <span class="label">상태</span>
+                <span>${item.condition}</span>
+              </div>
+            </div>
+            <div class="market-card-price">${item.price}</div>
+          </div>
+          <button class="edit-btn admin-only" data-id="${item.id}" title="편집">✎</button>
+        </div>
+      `).join('');
+
+      // Card click events
+      document.querySelectorAll('.market-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('edit-btn')) {
+            const id = card.dataset.id;
+            showMarketDetail(id);
+          }
+        });
+      });
+
+      // Edit button events
+      document.querySelectorAll('.market-card .edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          editMarket(parseInt(btn.dataset.id));
+        });
+      });
+    }
+
+    function showMarketDetail(id) {
+      const item = marketItems.find(a => a.id == id);
+      if (!item) return;
+
+      const lightbox = document.createElement('div');
+      lightbox.className = 'lightbox';
+      lightbox.innerHTML = `
+        <div class="lightbox-content">
+          <button class="lightbox-close">&times;</button>
+          <div class="lightbox-header">
+            <h3>${item.name}</h3>
+            <div class="details">
+              <span>상태: ${item.condition}</span>
+              <span>${item.sold ? '판매완료' : '판매중'}</span>
+            </div>
+            <div class="price">${item.price}</div>
+          </div>
+          ${item.images && item.images.length > 0 
+            ? `<div class="lightbox-images">${item.images.map(img => `<img src="${img}" alt="${item.name}">`).join('')}</div>`
+            : `<div class="lightbox-no-image">등록된 이미지가 없습니다</div>`
+          }
+        </div>
+      `;
+      document.body.appendChild(lightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
+          lightbox.remove();
+        }
+      });
+    }
+
+    function initModal() {
+      addMarketBtn?.addEventListener('click', () => {
+        editingId = null;
+        modalTitle.textContent = '새 물품 추가';
+        document.getElementById('marketName').value = '';
+        document.getElementById('marketCondition').value = '';
+        document.getElementById('marketPrice').value = '';
+        document.getElementById('marketSold').value = 'false';
+        uploadedImages = [];
+        renderPreviewImages();
+        deleteBtn.style.display = 'none';
+        marketModal.classList.add('active');
+      });
+
+      modalClose?.addEventListener('click', hideModal);
+      modalCancel?.addEventListener('click', hideModal);
+
+      modalConfirm?.addEventListener('click', () => {
+        const name = document.getElementById('marketName').value.trim();
+        const condition = document.getElementById('marketCondition').value.trim();
+        const price = document.getElementById('marketPrice').value.trim();
+        const sold = document.getElementById('marketSold').value === 'true';
+
+        if (!name) {
+          alert('제품명을 입력해주세요.');
+          return;
+        }
+
+        if (editingId) {
+          const index = marketItems.findIndex(a => a.id === editingId);
+          if (index !== -1) {
+            marketItems[index].name = name;
+            marketItems[index].condition = condition;
+            marketItems[index].price = price;
+            marketItems[index].sold = sold;
+            if (uploadedImages.length > 0) {
+              marketItems[index].images = uploadedImages;
+            }
+          }
+        } else {
+          const newItem = {
+            id: Date.now(),
+            name,
+            condition,
+            price,
+            sold,
+            images: uploadedImages
+          };
+          marketItems.unshift(newItem);
+        }
+
+        saveMarket(marketItems);
+        renderMarket();
+        hideModal();
+      });
+
+      deleteBtn?.addEventListener('click', () => {
+        if (editingId && confirm('정말 삭제하시겠습니까?')) {
+          marketItems = marketItems.filter(a => a.id !== editingId);
+          saveMarket(marketItems);
+          renderMarket();
+          hideModal();
+        }
+      });
+
+      uploadInput?.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+      });
+
+      const uploadArea = document.getElementById('uploadArea');
+      uploadArea?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+      uploadArea?.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+      });
+      uploadArea?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+      });
+    }
+
+    function editMarket(id) {
+      const item = marketItems.find(a => a.id === id);
+      if (!item) return;
+
+      editingId = id;
+      modalTitle.textContent = '물품 편집';
+      document.getElementById('marketName').value = item.name;
+      document.getElementById('marketCondition').value = item.condition;
+      document.getElementById('marketPrice').value = item.price;
+      document.getElementById('marketSold').value = item.sold ? 'true' : 'false';
+      uploadedImages = item.images ? [...item.images] : [];
+      renderPreviewImages();
+      deleteBtn.style.display = 'block';
+      marketModal.classList.add('active');
+    }
+
+    function hideModal() {
+      marketModal.classList.remove('active');
+      uploadedImages = [];
+      editingId = null;
+    }
+
+    function handleFiles(files) {
+      Array.from(files).forEach(file => {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            uploadedImages.push(e.target.result);
+            renderPreviewImages();
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    function renderPreviewImages() {
+      previewImages.innerHTML = uploadedImages.map((img, index) => `
+        <div class="preview-item">
+          <img src="${img}" alt="미리보기">
+          <button class="remove-btn" data-index="${index}">&times;</button>
+        </div>
+      `).join('');
+
+      previewImages.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          uploadedImages.splice(parseInt(btn.dataset.index), 1);
+          renderPreviewImages();
+        });
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LINKTREE - 연영회</title>
+  <link rel="stylesheet" href="css/globals.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/linktree.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navigation" id="navigation">
+    <div class="nav-container">
+      <div class="nav-left">
+        <button class="admin-toggle-btn" id="adminToggle" title="관리자 모드 토글">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+        </button>
+        <a href="index.html" class="logo">
+          <div class="logo-image">
+            <img src="../public/images/연영회 방패로고_검정.jpg" alt="연영회 로고">
+          </div>
+          <div class="logo-text">
+            <span>연세대학교 중앙사진동아리</span>
+            연영회
+          </div>
+        </a>
+      </div>
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="메뉴 토글">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li class="has-dropdown">
+          <a href="index.html">ABOUT</a>
+          <ul class="dropdown">
+            <li><a href="index.html">연영회 소개</a></li>
+            <li><a href="about.html">연혁</a></li>
+            <li><a href="photographers.html">PHOTOGRAPHERS</a></li>
+            <li><a href="recruiting.html">RECRUITING</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="records.html">ARCHIVE</a>
+          <ul class="dropdown">
+            <li><a href="records.html">활동 기록</a></li>
+            <li><a href="exhibitions.html">전시회</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="linktree.html" class="active">FOR MEMBERS</a>
+          <ul class="dropdown">
+            <li><a href="market.html">연영장터</a></li>
+            <li><a href="linktree.html" class="active">LINKTREE</a></li>
+          </ul>
+        </li>
+        <li><a href="donate.html">DONATE US</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="linktree-page">
+    <div class="container">
+      <header class="linktree-header">
+        <div class="header-title-row">
+          <h1>LINKTREE</h1>
+          <button class="add-link-btn admin-only" id="addLinkBtn">+ 새 링크 추가</button>
+        </div>
+        <p class="subtitle">연영회 공식 채널 및 서비스</p>
+      </header>
+
+      <div class="linktree-columns" id="linktreeColumns">
+        <!-- 카테고리별 링크가 동적으로 추가됩니다 -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Add/Edit Modal -->
+  <div class="linktree-modal-overlay" id="formModal">
+    <div class="linktree-form-modal">
+      <h2 id="formModalTitle">새 링크 추가</h2>
+      <form id="linkForm">
+        <div class="form-group">
+          <label>링크 이름</label>
+          <input type="text" id="formName" required placeholder="예: Instagram">
+        </div>
+        <div class="form-group">
+          <label>링크 URL</label>
+          <input type="url" id="formUrl" required placeholder="https://...">
+        </div>
+        <div class="form-group">
+          <label>카테고리</label>
+          <select id="formCategory" required>
+            <option value="promotion">홍보 페이지</option>
+            <option value="inquiry">문의 및 협업 제안</option>
+            <option value="photo">사진 관련 페이지</option>
+            <option value="activity">활동 관련</option>
+            <option value="sponsor">후원 업체</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" id="formCancel">취소</button>
+          <button type="submit" class="submit-btn">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div class="linktree-modal-overlay" id="deleteModal">
+    <div class="linktree-confirm-modal">
+      <h3>링크 삭제</h3>
+      <p id="deleteMessage">이 링크를 삭제하시겠습니까?</p>
+      <div class="form-actions">
+        <button id="deleteCancelBtn">취소</button>
+        <button class="delete-confirm-btn" id="deleteConfirmBtn">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="logo-text">연세대학교 중앙사진동아리 연영회</div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="footer-info-grid">
+          <div class="footer-info-item">
+            <span class="info-label">오픈 카톡방</span>
+            <a href="https://open.kakao.com/o/snVWZ4th" target="_blank" class="info-content link-shortcut">링크 바로가기</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">INSTAGRAM</span>
+            <span class="info-content">@yonyongpage</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">E-mail</span>
+            <a href="mailto:kimse0604@naver.com" class="info-content">kimse0604@naver.com</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">HP</span>
+            <span class="info-content">010-6814-1800</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">주소</span>
+            <span class="info-content">서울특별시 서대문구 연희로 50 연세대학교 대강당 nn호</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    // 카테고리 정의
+    const CATEGORIES = [
+      { id: 'promotion', label: '홍보 페이지' },
+      { id: 'inquiry', label: '문의 및 협업 제안' },
+      { id: 'photo', label: '사진 관련 페이지' },
+      { id: 'activity', label: '활동 관련' },
+      { id: 'sponsor', label: '후원 업체' }
+    ];
+
+    // 링크 데이터 (원본 config 데이터 반영)
+    const defaultLinksData = [
+      { name: "Instagram", url: "https://www.instagram.com/yonyoungpage", category: "promotion" },
+      { name: "Website", url: "http://localhost:3000/", category: "promotion" },
+      { name: "Open Kakao", url: "https://open.kakao.com/o/snVWZ4th", category: "inquiry" },
+      { name: "YSVPN", url: "https://ysvpn.yonsei.ac.kr/", category: "activity" },
+      { name: "연영서버", url: "https://165.132.176.27:8080/welcome/", category: "activity" },
+      { name: "대광 엔터프라이즈", url: "http://sirui.co.kr/", category: "sponsor" },
+      { name: "캘빈라이트", url: "http://kelvinlight.kr/", category: "sponsor" },
+      { name: "스파이더 홀스터", url: "https://spiderholster.com/", category: "sponsor" }
+    ];
+
+    // LocalStorage 키
+    const LINKTREE_KEY = 'mockup_linktree';
+
+    // 데이터 관리
+    function getLinks() {
+      const stored = localStorage.getItem(LINKTREE_KEY);
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      return defaultLinksData;
+    }
+
+    function saveLinks(data) {
+      localStorage.setItem(LINKTREE_KEY, JSON.stringify(data));
+    }
+
+    // State
+    let links = [];
+    let editingLink = null;
+    let linkToDelete = null;
+
+    // DOM Elements
+    const navigation = document.getElementById('navigation');
+    const adminToggle = document.getElementById('adminToggle');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const linktreeColumns = document.getElementById('linktreeColumns');
+    const formModal = document.getElementById('formModal');
+    const deleteModal = document.getElementById('deleteModal');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initNavigation();
+      initAdminMode();
+      loadLinks();
+      initModals();
+    });
+
+    function initNavigation() {
+      window.addEventListener('scroll', () => {
+        navigation.classList.toggle('scrolled', window.scrollY > 50);
+      });
+      mobileMenuToggle?.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+      });
+    }
+
+    function initAdminMode() {
+      updateAdminUI(getAdminMode());
+      adminToggle?.addEventListener('click', () => {
+        const newMode = !getAdminMode();
+        setAdminMode(newMode);
+        updateAdminUI(newMode);
+        renderLinks(); // Re-render to show/hide admin controls
+      });
+    }
+
+    function updateAdminUI(isAdmin) {
+      document.body.classList.toggle('admin-mode', isAdmin);
+      adminToggle?.classList.toggle('active', isAdmin);
+    }
+
+    function loadLinks() {
+      links = getLinks();
+      renderLinks();
+    }
+
+    function renderLinks() {
+      const isAdmin = getAdminMode();
+      
+      linktreeColumns.innerHTML = CATEGORIES.map(cat => {
+        const categoryLinks = links.filter(link => (link.category || 'promotion') === cat.id);
+        
+        return `
+          <div class="link-column">
+            <h2 class="column-title">
+              ${cat.id === 'private' ? `
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="display: inline-block; vertical-align: middle;">
+                  <path d="M17 10h-1V7c0-2.21-1.79-4-4-4S8 4.79 8 7v3H7c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zM10 7c0-1.1.9-2 2-2s2 .9 2 2v3h-4V7z" />
+                </svg>
+              ` : cat.label}
+            </h2>
+            <div class="column-links">
+              ${categoryLinks.length > 0 ? categoryLinks.map(link => `
+                <div class="link-card-wrapper">
+                  <a 
+                    href="${link.url}" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="link-card ${isAdmin ? 'admin-mode' : ''}"
+                    ${isAdmin ? 'onclick="event.preventDefault();"' : ''}
+                  >
+                    <span class="link-name">${link.name}</span>
+                  </a>
+                  ${isAdmin ? `
+                    <div class="admin-actions">
+                      <button class="edit-btn" data-name="${link.name}" title="수정">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4L18.5 2.5z"></path></svg>
+                      </button>
+                      <button class="delete-btn" data-name="${link.name}" title="삭제">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                      </button>
+                    </div>
+                  ` : ''}
+                </div>
+              `).join('') : `
+                <div class="empty-category">
+                  <span>준비 중입니다.</span>
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Event listeners
+      if (isAdmin) {
+        document.querySelectorAll('.link-card-wrapper .edit-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openEditModal(btn.dataset.name);
+          });
+        });
+        document.querySelectorAll('.link-card-wrapper .delete-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openDeleteModal(btn.dataset.name);
+          });
+        });
+      }
+    }
+
+    function initModals() {
+      // Add link button
+      document.getElementById('addLinkBtn')?.addEventListener('click', openAddModal);
+
+      // Form modal
+      formModal.addEventListener('click', (e) => {
+        if (e.target === formModal) formModal.classList.remove('active');
+      });
+      document.getElementById('formCancel').addEventListener('click', () => {
+        formModal.classList.remove('active');
+      });
+      document.getElementById('linkForm').addEventListener('submit', handleFormSubmit);
+
+      // Delete modal
+      deleteModal.addEventListener('click', (e) => {
+        if (e.target === deleteModal) deleteModal.classList.remove('active');
+      });
+      document.getElementById('deleteCancelBtn').addEventListener('click', () => {
+        deleteModal.classList.remove('active');
+      });
+      document.getElementById('deleteConfirmBtn').addEventListener('click', handleDeleteConfirm);
+    }
+
+    function openAddModal() {
+      editingLink = null;
+      document.getElementById('formModalTitle').textContent = '새 링크 추가';
+      document.getElementById('formName').value = '';
+      document.getElementById('formUrl').value = '';
+      document.getElementById('formCategory').value = 'promotion';
+      formModal.classList.add('active');
+    }
+
+    function openEditModal(name) {
+      const link = links.find(l => l.name === name);
+      if (!link) return;
+
+      editingLink = link;
+      document.getElementById('formModalTitle').textContent = '링크 수정';
+      document.getElementById('formName').value = link.name;
+      document.getElementById('formUrl').value = link.url;
+      document.getElementById('formCategory').value = link.category || 'promotion';
+      formModal.classList.add('active');
+    }
+
+    function openDeleteModal(name) {
+      const link = links.find(l => l.name === name);
+      if (!link) return;
+
+      linkToDelete = link;
+      document.getElementById('deleteMessage').innerHTML = `<strong>${link.name}</strong> 링크를 삭제하시겠습니까?`;
+      deleteModal.classList.add('active');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const newLink = {
+        name: document.getElementById('formName').value.trim(),
+        url: document.getElementById('formUrl').value.trim(),
+        category: document.getElementById('formCategory').value
+      };
+
+      if (editingLink) {
+        // Update existing
+        const index = links.findIndex(l => l.name === editingLink.name);
+        if (index !== -1) {
+          links[index] = newLink;
+        }
+        alert('링크가 수정되었습니다.');
+      } else {
+        // Add new
+        links.push(newLink);
+        alert('링크가 추가되었습니다.');
+      }
+
+      saveLinks(links);
+      renderLinks();
+      formModal.classList.remove('active');
+    }
+
+    function handleDeleteConfirm() {
+      if (linkToDelete) {
+        links = links.filter(l => l.name !== linkToDelete.name);
+        saveLinks(links);
+        renderLinks();
+        deleteModal.classList.remove('active');
+        alert('삭제되었습니다.');
+      }
+    }
+  </script>
+</body>
+</html>

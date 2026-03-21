@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전시회 - 연영회</title>
+  <link rel="stylesheet" href="css/globals.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/exhibitions.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navigation" id="navigation">
+    <div class="nav-container">
+      <div class="nav-left">
+        <button class="admin-toggle-btn" id="adminToggle" title="관리자 모드 토글">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+        </button>
+        <a href="index.html" class="logo">
+          <div class="logo-image">
+            <img src="../public/images/연영회 방패로고_검정.jpg" alt="연영회 로고">
+          </div>
+          <div class="logo-text">
+            <span>연세대학교 중앙사진동아리</span>
+            연영회
+          </div>
+        </a>
+      </div>
+      
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="메뉴 토글">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li class="has-dropdown">
+          <a href="index.html">ABOUT</a>
+          <ul class="dropdown">
+            <li><a href="index.html">연영회 소개</a></li>
+            <li><a href="about.html">연혁</a></li>
+            <li><a href="photographers.html">PHOTOGRAPHERS</a></li>
+            <li><a href="recruiting.html">RECRUITING</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="records.html" class="active">ARCHIVE</a>
+          <ul class="dropdown">
+            <li><a href="records.html">활동 기록</a></li>
+            <li><a href="exhibitions.html" class="active">전시회</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="linktree.html">FOR MEMBERS</a>
+          <ul class="dropdown">
+            <li><a href="market.html">연영장터</a></li>
+            <li><a href="linktree.html">LINKTREE</a></li>
+          </ul>
+        </li>
+        <li><a href="donate.html">DONATE US</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="exhibitions-page">
+    <div class="exhibitions-header">
+      <div class="container">
+        <h1>전시회</h1>
+        <p class="subtitle">연영회가 만들어온 전시 목록입니다</p>
+        <button class="upload-trigger-btn admin-only" id="addExhibitionBtn" aria-label="전시 추가">+</button>
+      </div>
+    </div>
+
+    <div class="exhibitions-content">
+      <div class="container">
+        <div class="exhibitions-grid" id="exhibitionsGrid">
+          <!-- 전시회 카드가 동적으로 추가됩니다 -->
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Exhibition Popup -->
+  <div class="exhibition-popup-overlay" id="exhibitionPopup">
+    <div class="exhibition-popup-content">
+      <button class="popup-close-btn" id="popupCloseBtn">×</button>
+      
+      <div class="popup-slideshow" id="popupSlideshow">
+        <!-- 슬라이드 이미지가 동적으로 추가됩니다 -->
+      </div>
+
+      <button class="popup-nav-btn prev" id="popupPrevBtn" aria-label="이전 사진">‹</button>
+      <button class="popup-nav-btn next" id="popupNextBtn" aria-label="다음 사진">›</button>
+
+      <div class="popup-info-overlay">
+        <h2 class="popup-title" id="popupTitle"></h2>
+        <p class="popup-date" id="popupDate"></p>
+      </div>
+
+      <div class="popup-indicators" id="popupIndicators">
+        <!-- 인디케이터가 동적으로 추가됩니다 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="exhibition-modal-overlay" id="formModal">
+    <div class="exhibition-form-modal">
+      <h2 id="formModalTitle">새 전시 추가</h2>
+      <form id="exhibitionForm">
+        <div class="form-group">
+          <label>전시회 제목</label>
+          <input type="text" id="formTitle" required placeholder="전시회 제목을 입력하세요">
+        </div>
+        <div class="form-group">
+          <label>기간</label>
+          <input type="text" id="formDate" placeholder="예: 2026.02.12 ~ 2026.02.14">
+        </div>
+        <div class="form-group">
+          <label>장소</label>
+          <input type="text" id="formLocation" placeholder="전시 장소를 입력하세요">
+        </div>
+        <div class="form-group">
+          <label>이미지</label>
+          <div class="upload-area" id="uploadArea">
+            <input type="file" id="uploadInput" multiple accept="image/*">
+            <div class="upload-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17,8 12,3 7,8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <p>클릭하거나 이미지를 드래그하세요</p>
+            </div>
+          </div>
+          <div class="preview-images" id="previewImages"></div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-danger admin-only" id="deleteBtn" style="margin-right: auto; display: none;">삭제</button>
+          <button type="button" id="formCancel">취소</button>
+          <button type="submit" class="submit-btn">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="logo-text">연세대학교 중앙사진동아리 연영회</div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="footer-info-grid">
+          <div class="footer-info-item">
+            <span class="info-label">오픈 카톡방</span>
+            <a href="https://open.kakao.com/o/snVWZ4th" target="_blank" class="info-content link-shortcut">링크 바로가기</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">INSTAGRAM</span>
+            <span class="info-content">@yonyongpage</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">E-mail</span>
+            <a href="mailto:kimse0604@naver.com" class="info-content">kimse0604@naver.com</a>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">HP</span>
+            <span class="info-content">010-6814-1800</span>
+          </div>
+          <div class="footer-info-item">
+            <span class="info-label">주소</span>
+            <span class="info-content">서울특별시 서대문구 연희로 50 연세대학교 대강당 nn호</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    // State
+    let exhibitions = [];
+    let uploadedImages = [];
+    let editingId = null;
+    let selectedExhibition = null;
+    let currentImageIndex = 0;
+    let slideInterval = null;
+
+    // DOM Elements
+    const navigation = document.getElementById('navigation');
+    const adminToggle = document.getElementById('adminToggle');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const exhibitionsGrid = document.getElementById('exhibitionsGrid');
+    const exhibitionPopup = document.getElementById('exhibitionPopup');
+    const formModal = document.getElementById('formModal');
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initNavigation();
+      initAdminMode();
+      loadExhibitions();
+      initPopup();
+      initModal();
+    });
+
+    function initNavigation() {
+      window.addEventListener('scroll', () => {
+        navigation.classList.toggle('scrolled', window.scrollY > 50);
+      });
+      mobileMenuToggle?.addEventListener('click', () => {
+        navMenu.classList.toggle('open');
+      });
+    }
+
+    function initAdminMode() {
+      updateAdminUI(getAdminMode());
+      adminToggle?.addEventListener('click', () => {
+        const newMode = !getAdminMode();
+        setAdminMode(newMode);
+        updateAdminUI(newMode);
+        renderExhibitions();
+      });
+    }
+
+    function updateAdminUI(isAdmin) {
+      document.body.classList.toggle('admin-mode', isAdmin);
+      adminToggle?.classList.toggle('active', isAdmin);
+    }
+
+    function loadExhibitions() {
+      exhibitions = getExhibitions();
+      renderExhibitions();
+    }
+
+    function renderExhibitions() {
+      const isAdmin = getAdminMode();
+      
+      exhibitionsGrid.innerHTML = exhibitions.map(exhibition => `
+        <div class="exhibition-card ${isAdmin ? 'admin-active' : ''}" data-id="${exhibition.id}">
+          <div class="exhibition-image">
+            <img src="${exhibition.image || (exhibition.images && exhibition.images[0])}" alt="${exhibition.title}">
+            ${isAdmin ? `
+              <div class="admin-actions">
+                <button class="admin-btn edit" data-id="${exhibition.id}" title="수정">✎</button>
+                <button class="admin-btn delete" data-id="${exhibition.id}" title="삭제">×</button>
+              </div>
+            ` : ''}
+          </div>
+          <div class="exhibition-info">
+            <h2>${exhibition.title}</h2>
+            <p class="exhibition-date">${exhibition.date}</p>
+            <p class="exhibition-location">${exhibition.location}</p>
+          </div>
+        </div>
+      `).join('');
+
+      // Card click events
+      document.querySelectorAll('.exhibition-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (!e.target.closest('.admin-actions')) {
+            openPopup(parseInt(card.dataset.id));
+          }
+        });
+      });
+
+      // Admin actions
+      document.querySelectorAll('.admin-btn.edit').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openEditModal(parseInt(btn.dataset.id));
+        });
+      });
+
+      document.querySelectorAll('.admin-btn.delete').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteExhibition(parseInt(btn.dataset.id));
+        });
+      });
+    }
+
+    // Popup functions
+    function initPopup() {
+      document.getElementById('popupCloseBtn').addEventListener('click', closePopup);
+      exhibitionPopup.addEventListener('click', (e) => {
+        if (e.target === exhibitionPopup) closePopup();
+      });
+      document.getElementById('popupPrevBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        prevImage();
+      });
+      document.getElementById('popupNextBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        nextImage();
+      });
+    }
+
+    function openPopup(id) {
+      selectedExhibition = exhibitions.find(e => e.id === id);
+      if (!selectedExhibition) return;
+
+      currentImageIndex = 0;
+      const images = selectedExhibition.images || [selectedExhibition.image];
+
+      // Render slides
+      document.getElementById('popupSlideshow').innerHTML = images.map((img, idx) => `
+        <div class="popup-slide ${idx === 0 ? 'active' : ''}">
+          <img src="${img}" alt="${selectedExhibition.title} - ${idx + 1}" class="popup-image">
+        </div>
+      `).join('');
+
+      // Render indicators
+      if (images.length > 1) {
+        document.getElementById('popupIndicators').innerHTML = images.map((_, idx) => `
+          <button class="indicator-dot ${idx === 0 ? 'active' : ''}" data-index="${idx}" aria-label="${idx + 1}번 사진으로 이동"></button>
+        `).join('');
+        
+        document.querySelectorAll('.indicator-dot').forEach(dot => {
+          dot.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToImage(parseInt(dot.dataset.index));
+          });
+        });
+
+        document.getElementById('popupPrevBtn').style.display = 'flex';
+        document.getElementById('popupNextBtn').style.display = 'flex';
+        document.getElementById('popupIndicators').style.display = 'flex';
+      } else {
+        document.getElementById('popupIndicators').innerHTML = '';
+        document.getElementById('popupPrevBtn').style.display = 'none';
+        document.getElementById('popupNextBtn').style.display = 'none';
+        document.getElementById('popupIndicators').style.display = 'none';
+      }
+
+      document.getElementById('popupTitle').textContent = selectedExhibition.title;
+      document.getElementById('popupDate').textContent = selectedExhibition.date;
+
+      exhibitionPopup.classList.add('active');
+      startSlideTimer();
+    }
+
+    function closePopup() {
+      exhibitionPopup.classList.remove('active');
+      stopSlideTimer();
+      selectedExhibition = null;
+    }
+
+    function startSlideTimer() {
+      stopSlideTimer();
+      const images = selectedExhibition?.images || [selectedExhibition?.image];
+      if (images && images.length > 1) {
+        slideInterval = setInterval(() => {
+          nextImage();
+        }, 3000);
+      }
+    }
+
+    function stopSlideTimer() {
+      if (slideInterval) {
+        clearInterval(slideInterval);
+        slideInterval = null;
+      }
+    }
+
+    function prevImage() {
+      const images = selectedExhibition.images || [selectedExhibition.image];
+      currentImageIndex = currentImageIndex === 0 ? images.length - 1 : currentImageIndex - 1;
+      updateSlideshow();
+      startSlideTimer();
+    }
+
+    function nextImage() {
+      const images = selectedExhibition.images || [selectedExhibition.image];
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      updateSlideshow();
+    }
+
+    function goToImage(index) {
+      currentImageIndex = index;
+      updateSlideshow();
+      startSlideTimer();
+    }
+
+    function updateSlideshow() {
+      document.querySelectorAll('.popup-slide').forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentImageIndex);
+      });
+      document.querySelectorAll('.indicator-dot').forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentImageIndex);
+      });
+    }
+
+    // Modal functions
+    function initModal() {
+      document.getElementById('addExhibitionBtn')?.addEventListener('click', openAddModal);
+      
+      formModal.addEventListener('click', (e) => {
+        if (e.target === formModal) formModal.classList.remove('active');
+      });
+      document.getElementById('formCancel').addEventListener('click', () => {
+        formModal.classList.remove('active');
+      });
+      document.getElementById('exhibitionForm').addEventListener('submit', handleFormSubmit);
+      document.getElementById('deleteBtn').addEventListener('click', () => {
+        if (editingId && confirm('정말 삭제하시겠습니까?')) {
+          deleteExhibition(editingId);
+          formModal.classList.remove('active');
+        }
+      });
+
+      // File upload
+      const uploadInput = document.getElementById('uploadInput');
+      const uploadArea = document.getElementById('uploadArea');
+      
+      uploadInput?.addEventListener('change', (e) => handleFiles(e.target.files));
+      
+      uploadArea?.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+      });
+      uploadArea?.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+      });
+      uploadArea?.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        handleFiles(e.dataTransfer.files);
+      });
+    }
+
+    function openAddModal() {
+      editingId = null;
+      document.getElementById('formModalTitle').textContent = '새 전시 추가';
+      document.getElementById('formTitle').value = '';
+      document.getElementById('formDate').value = '';
+      document.getElementById('formLocation').value = '';
+      uploadedImages = [];
+      renderPreviewImages();
+      document.getElementById('deleteBtn').style.display = 'none';
+      formModal.classList.add('active');
+    }
+
+    function openEditModal(id) {
+      const exhibition = exhibitions.find(e => e.id === id);
+      if (!exhibition) return;
+
+      editingId = id;
+      document.getElementById('formModalTitle').textContent = '전시 정보 수정';
+      document.getElementById('formTitle').value = exhibition.title;
+      document.getElementById('formDate').value = exhibition.date;
+      document.getElementById('formLocation').value = exhibition.location;
+      uploadedImages = [...(exhibition.images || [exhibition.image])];
+      renderPreviewImages();
+      document.getElementById('deleteBtn').style.display = 'block';
+      formModal.classList.add('active');
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('formTitle').value.trim();
+      const date = document.getElementById('formDate').value.trim();
+      const location = document.getElementById('formLocation').value.trim();
+
+      if (!title) {
+        alert('전시회 제목을 입력해주세요.');
+        return;
+      }
+
+      if (editingId) {
+        // Update existing
+        const index = exhibitions.findIndex(e => e.id === editingId);
+        if (index !== -1) {
+          exhibitions[index].title = title;
+          exhibitions[index].date = date;
+          exhibitions[index].location = location;
+          if (uploadedImages.length > 0) {
+            exhibitions[index].images = uploadedImages;
+            exhibitions[index].image = uploadedImages[0];
+          }
+        }
+        alert('전시 정보가 수정되었습니다.');
+      } else {
+        // Add new
+        const newExhibition = {
+          id: Date.now(),
+          title,
+          date,
+          location,
+          images: uploadedImages.length > 0 ? uploadedImages : ['../public/images/exhibitions/DSC_3543.jpg'],
+          image: uploadedImages[0] || '../public/images/exhibitions/DSC_3543.jpg'
+        };
+        exhibitions.unshift(newExhibition);
+        alert('전시 정보가 추가되었습니다.');
+      }
+
+      saveExhibitions(exhibitions);
+      renderExhibitions();
+      formModal.classList.remove('active');
+    }
+
+    function deleteExhibition(id) {
+      if (!confirm('정말 삭제하시겠습니까?')) return;
+      
+      exhibitions = exhibitions.filter(e => e.id !== id);
+      saveExhibitions(exhibitions);
+      renderExhibitions();
+      alert('삭제되었습니다.');
+    }
+
+    function handleFiles(files) {
+      Array.from(files).forEach(file => {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            uploadedImages.push(e.target.result);
+            renderPreviewImages();
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    function renderPreviewImages() {
+      const previewImages = document.getElementById('previewImages');
+      previewImages.innerHTML = uploadedImages.map((img, index) => `
+        <div class="preview-item">
+          <img src="${img}" alt="미리보기">
+          <button type="button" class="remove-btn" data-index="${index}">×</button>
+        </div>
+      `).join('');
+
+      previewImages.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          uploadedImages.splice(parseInt(btn.dataset.index), 1);
+          renderPreviewImages();
+        });
+      });
+    }
+  </script>
+</body>
+</html>
